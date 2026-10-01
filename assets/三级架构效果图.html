@@ -95,6 +95,20 @@
   .qbox{font-size:12.5px;font-weight:600;color:var(--text-secondary);
     background:var(--surface-2);border-radius:6px;padding:6px 9px;display:inline-block;margin-top:7px}
 
+  /* ---------- decide table ---------- */
+  .subhead{margin:30px 0 12px;font-size:15px;font-weight:600;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .subhead small{font-weight:400;color:var(--text-secondary);font-size:12.5px}
+  .tablewrap{background:var(--surface-1);border:1px solid var(--line);border-radius:10px;
+    overflow:auto;box-shadow:var(--shadow)}
+  table.decide{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+  table.decide th{text-align:left;font-size:12px;letter-spacing:.05em;font-weight:700;
+    color:var(--text-muted);background:var(--surface-2);padding:10px 16px;border-bottom:1px solid var(--line)}
+  table.decide td{padding:11px 16px;border-top:1px solid var(--line);vertical-align:top}
+  table.decide td.to{font-weight:600;white-space:nowrap}
+  table.decide td.why{color:var(--text-secondary);font-size:12.5px}
+  .to-c1{color:var(--c1)} .to-c2{color:var(--c2)} .to-c3{color:var(--c3)}
+  .to-none{color:var(--text-muted)}
+
   /* ---------- wiring ---------- */
   .wire{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:start}
   pre{margin:0;background:var(--surface-1);border:1px solid var(--line);border-radius:10px;
@@ -110,6 +124,10 @@
   .imp .at{color:var(--c1);font-weight:700}
   .warn{margin-top:14px;font-size:12.5px;color:var(--text-secondary);
     background:var(--surface-2);border-left:3px solid var(--line-strong);border-radius:0 8px 8px 0;padding:10px 14px}
+  .warn b,.tip b{color:var(--text-primary)}
+  .tip{margin-top:14px;font-size:12.5px;color:var(--text-secondary);line-height:1.8;
+    background:var(--surface-2);border-left:3px solid var(--c1);border-radius:0 8px 8px 0;padding:10px 14px}
+  .tip code{font:12px/1.6 ui-monospace,Menlo,Consolas,monospace;color:var(--text-primary)}
 
   /* ---------- questions ---------- */
   .qs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -124,6 +142,8 @@
   .q .opt.rec::before{content:"●";color:var(--c1)}
   .q .opt b{font-weight:600}
   footer{color:var(--text-muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:16px}
+  footer code{font:12px/1.6 ui-monospace,Menlo,Consolas,monospace;color:var(--text-secondary)}
+  footer a{color:var(--c1)}
   @media (max-width:900px){
     .layers,.branches,.wire,.qs{grid-template-columns:1fr}
   }
@@ -133,13 +153,13 @@
 <div class="wrap">
 
   <h1>三级 AI 记忆架构 · 效果图</h1>
-  <p class="sub">Windows ⇄ Ubuntu 双系统 &nbsp;·&nbsp; 草案 v1（2026-10-01）&nbsp;·&nbsp; 供你圈改：每块都能拆、能改颜色、能改判定标准</p>
+  <p class="sub">Windows ⇄ Ubuntu 双系统 &nbsp;·&nbsp; 三层记忆怎么分、怎么接、怎么用 &nbsp;·&nbsp; 完整说明见仓库 <code>docs/</code> 六篇，可直接复制的空骨架在 <code>template/</code></p>
 
   <!-- ============ 1. 路由 ============ -->
   <section>
     <div class="sec-head">
       <span class="sec-num">01</span><h2>任务进来先路由：这条活儿归哪个系统？</h2>
-      <span class="note">每接一个任务都走一遍这四步</span>
+      <span class="note">每接一个任务都走一遍这几步</span>
     </div>
 
     <div class="center"><span class="node start">你下达任务</span></div>
@@ -153,24 +173,28 @@
     <div class="branches">
       <div class="branch b-win">
         <span class="tag"><i class="dot"></i>Windows 专属</span>
-        <span class="eg">项目 A / 项目 B / 课程作业<br>Windows 系统·外设排查·PowerShell</span>
+        <span class="eg">Windows 上的编译与打包<br>外设·驱动·系统设置·PowerShell</span>
         <span class="reads">读 通用 ＋ Windows 记忆</span>
       </div>
       <div class="branch b-ubu">
         <span class="tag"><i class="dot"></i>Ubuntu 专属</span>
-        <span class="eg">ROS2 / ESP 烧录<br>kbd_poll 驱动 / 装机 / apt 换源</span>
+        <span class="eg">ROS 工作区 · 内核模块编译<br>apt 换源 · 装机分区</span>
         <span class="reads">读 通用 ＋ Ubuntu 记忆</span>
       </div>
       <div class="branch b-all">
         <span class="tag"><i class="dot"></i>跨系统</span>
-        <span class="eg">D 盘工具链 / 技能库<br>双系统时间与 RTC / 这套记忆本身</span>
+        <span class="eg">共享盘上的工具链 · 技能库<br>双系统时间与 RTC · 这套记忆本身</span>
         <span class="reads">三层全读</span>
       </div>
       <div class="branch b-common">
         <span class="tag"><i class="dot"></i>纯通用</span>
-        <span class="eg">沟通风格 / 写作去 AI 味<br>报告规矩 / 记忆怎么写</span>
+        <span class="eg">写作与改稿 · 沟通偏好<br>报告规矩 · 记忆怎么写</span>
         <span class="reads">只读 通用</span>
       </div>
+    </div>
+
+    <div class="tip">
+      <b>判不准的时候按「跨系统」处理。</b>多读一层的代价，小于答错的代价。
     </div>
 
     <div class="arrow"></div>
@@ -178,10 +202,16 @@
       <div class="q">第 2 步 · 判断该调哪个 skill</div>
       <div class="hint">扫技能列表 → 说出调哪个、为什么 → 再动手</div>
     </div>
+
+    <div class="tip">
+      <b>第 2 步要出声，长这样</b>：「这是 Ubuntu 任务，我读了通用＋Ubuntu」「这个用 <code>markitdown</code> 更合适」。<br>
+      这两句话是做给人看的。判断错了，用户当场就能发现，不必等到答案跑偏才回头排查，而这句的成本几乎为零。
+    </div>
+
     <div class="arrow"></div>
     <div class="node center">
-      <b>第 3 步 · 执行</b>
-      <div class="hint" style="color:var(--text-secondary);font-size:13px">干完活有新规矩 → 写回对应那层（长期成立 → 通用；只在某系统成立 → 该系统层）</div>
+      <b>第 3 步 · 执行，然后把新规矩写回去</b>
+      <div class="hint" style="color:var(--text-secondary);font-size:13px">换个系统还成立 → 写通用层；只在某一个系统成立 → 写该系统层。写完在该层 <code>MEMORY.md</code> 索引里加一行</div>
     </div>
   </section>
 
@@ -196,18 +226,18 @@
       <div class="layer l1">
         <div class="top">
           <h3><i class="dot" style="background:var(--c1)"></i>通用 MEMORY</h3>
-          <div class="toppath">D:\AI-MEMORY\通用MEMORY\</div>
+          <div class="toppath">&lt;共享盘&gt;\AI-MEMORY\通用MEMORY\</div>
         </div>
         <div class="body">
           <span class="qbox">判定：换到另一个系统，这条还成立吗？</span>
           <div class="rule">
             <ul>
-              <li>怎么跟你沟通 <small>大白话＋类比</small></li>
-              <li>记忆的写法 <small>只写长期约束，不写"此刻状态"</small></li>
-              <li>技能库位置 <small>D:\claude-skills\</small></li>
-              <li>工具装 D:\&lt;名字&gt;，别进项目文件夹</li>
-              <li>API key 不写进任何文档</li>
-              <li>报告要保留原始图表</li>
+              <li>怎么跟你沟通 <small>用大白话还是术语，要不要先给结论</small></li>
+              <li>记忆的写法 <small>只写长期约束，不写「此刻状态」</small></li>
+              <li>工具装在哪个目录 <small>统一放一处，别塞进项目文件夹</small></li>
+              <li>写作与改稿的规矩</li>
+              <li>密钥不进任何文档</li>
+              <li>报告要保留原始图表与原始数据</li>
             </ul>
           </div>
         </div>
@@ -216,18 +246,17 @@
       <div class="layer l2">
         <div class="top">
           <h3><i class="dot" style="background:var(--c2)"></i>Windows MEMORY</h3>
-          <div class="toppath">D:\AI-MEMORY\WindowsMEMORY\</div>
+          <div class="toppath">&lt;共享盘&gt;\AI-MEMORY\WindowsMEMORY\</div>
         </div>
         <div class="body">
           <span class="qbox">判定：只在 Windows 上做的事</span>
           <div class="rule">
             <ul>
-              <li>项目 A（目标检测比赛）</li>
-              <li>项目 B（开关电源 / PCB）</li>
-              <li>课程作业 · 实验报告</li>
-              <li>Windows 系统·驱动·外设排查</li>
-              <li>PowerShell / 盘符路径规矩</li>
-              <li>各项目的 <b>当前进度</b>（会过期）</li>
+              <li>Windows 侧的项目 <small>按域分目录，比如「工具链」「外设」</small></li>
+              <li>命令行与路径规矩 <small>盘符、路径长度、编码</small></li>
+              <li>驱动与外设排障</li>
+              <li>系统层能装什么、不能装什么</li>
+              <li>某个任务的当前进度 <small>会过期，尽量别写</small></li>
             </ul>
           </div>
         </div>
@@ -236,22 +265,63 @@
       <div class="layer l3">
         <div class="top">
           <h3><i class="dot" style="background:var(--c3)"></i>Ubuntu MEMORY</h3>
-          <div class="toppath">D:\AI-MEMORY\UbuntuMEMORY\</div>
+          <div class="toppath">&lt;共享盘&gt;\AI-MEMORY\UbuntuMEMORY\</div>
         </div>
         <div class="body">
           <span class="qbox">判定：只在 Ubuntu 上做的事</span>
           <div class="rule">
             <ul>
-              <li>ROS2 Humble / 工作区</li>
-              <li>内置键盘 kbd_poll 轮询驱动</li>
-              <li>无线键盘断电重连方案</li>
-              <li>Ubuntu 装机 / 分区 / apt 源</li>
-              <li>npm·node 环境（v22）</li>
-              <li>Ubuntu 侧当前状态（会过期）</li>
+              <li>ROS 工作区与编译方式</li>
+              <li>驱动与内核模块 <small>比如某个设备要改内核参数</small></li>
+              <li>装机 · 分区 · apt 与镜像源</li>
+              <li>开发环境版本 <small>node、python、工具链的约定</small></li>
+              <li>Ubuntu 侧当前状态 <small>会过期，尽量别写</small></li>
             </ul>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="subhead">判定演练 <small>同一条事实，落到哪一层</small></div>
+
+    <div class="tablewrap">
+      <table class="decide">
+        <thead>
+          <tr><th style="width:44%">一条记忆</th><th style="width:20%">去哪层</th><th>为什么</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>「长文结尾不要用『总的来说』」</td>
+            <td class="to to-c1">通用</td>
+            <td class="why">换到另一个系统照样成立，跟跑在哪个系统无关</td>
+          </tr>
+          <tr>
+            <td>「这台笔记本的键盘中断会丢，要改内核参数」</td>
+            <td class="to to-c3">Ubuntu</td>
+            <td class="why">只在这台机器的那个系统上成立，换过去就不对了</td>
+          </tr>
+          <tr>
+            <td>「跑脚本一律用某个指定解释器」</td>
+            <td class="to to-c1">通用</td>
+            <td class="why">是开发约定，不是某个系统的特性</td>
+          </tr>
+          <tr>
+            <td>「某软件现在装到第 3 步了」</td>
+            <td class="to to-none">哪层都别放</td>
+            <td class="why">会过期。过期的状态不该写成记忆，真要留就写进它所属的系统层，别塞进通用层</td>
+          </tr>
+          <tr>
+            <td>「共享盘上的工具链怎么装」</td>
+            <td class="to to-none">跨系统，写通用</td>
+            <td class="why">任务跨两个系统，但内容两边都成立，按<b>内容归属</b>落层，不按任务归属</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <b>一个高频错误</b>：把「跨系统任务」当成一层，于是任务收尾时留下的所有东西都留在原来的地方。<br>
+      分层的依据是内容归属，不是任务归属。某条内容只在 Windows 上发生，哪怕它是从 Ubuntu 侧的任务里长出来的，也该落进 Windows 层。
     </div>
   </section>
 
@@ -259,27 +329,25 @@
   <section>
     <div class="sec-head">
       <span class="sec-num">03</span><h2>文件放哪 · 两边怎么接上</h2>
-      <span class="note">全放 D 盘：NTFS 两个系统都读写得到</span>
+      <span class="note">全放共享盘：两个系统都读写得到，重装一侧也不会丢</span>
     </div>
 
     <div class="wire">
-      <pre>D:\AI-MEMORY\
+      <pre>D:\AI-MEMORY\              ← 共享盘（盘符不一定是 D:）
 ├── 通用MEMORY\
 │   ├── MEMORY.md          ← 索引 + 路由表（第一入口）
 │   ├── 沟通风格.md
-│   ├── 记忆规矩.md
-│   └── 技能库位置.md
+│   └── 记忆怎么写.md
 ├── WindowsMEMORY\
 │   ├── MEMORY.md          ← 索引
-│   ├── 项目A\ …
-│   ├── 项目B\ …
-│   ├── 课程作业\ …
-│   └── 本机Windows\ …
+│   ├── 外设与驱动\
+│   │   ├── _INDEX-外设与驱动.md
+│   │   └── <一条一主题>.md
+│   └── 工具链\ …
 └── UbuntuMEMORY\
     ├── MEMORY.md          ← 索引
     ├── ROS2\ …
-    ├── 本机Linux\ …
-    └── 远程与网络\ …</pre>
+    └── 装机与分区\ …</pre>
 
       <div class="imports">
         <div class="imp">
@@ -291,52 +359,56 @@
         <div class="imp">
           <div class="who"><i class="dot" style="background:var(--c3)"></i>Ubuntu 侧</div>
           <code>/home/&lt;你&gt;/.claude/CLAUDE.md</code>
-          <code>&nbsp;&nbsp;<span class="at">@</span><b>/media/&lt;你&gt;/&lt;挂载点&gt;/AI-MEMORY/通用MEMORY/MEMORY.md</b></code>
-          <code>&nbsp;&nbsp;<span class="at">@</span><b>/media/&lt;你&gt;/&lt;挂载点&gt;/AI-MEMORY/UbuntuMEMORY/MEMORY.md</b></code>
+          <code>&nbsp;&nbsp;<span class="at">@</span><b>/media/&lt;你&gt;/&lt;卷标&gt;/AI-MEMORY/通用MEMORY/MEMORY.md</b></code>
+          <code>&nbsp;&nbsp;<span class="at">@</span><b>/media/&lt;你&gt;/&lt;卷标&gt;/AI-MEMORY/UbuntuMEMORY/MEMORY.md</b></code>
         </div>
         <div class="warn">
-          <b>要点</b>：`@` 那一行就是"只读自己那两份"。D 盘没挂载时 Ubuntu 那两行会<b>静默失效</b>（不报错）——
-          所以启动前点一下 D 盘，或者放进开机自动挂载。
+          <b>要点</b>：那两行 <code>@</code> 就是「只读自己那两份」。内容一条都不要抄进全局记忆文件，
+          抄了就会出现第二个版本，两边迟早打架 —— 这正是这套框架要消掉的东西。
+        </div>
+        <div class="warn">
+          <b>坑</b>：共享盘没挂载时，Ubuntu 那两行会<b>静默失效</b>，不报错，记忆看起来就是空的。
+          所以要么开机自动挂载，要么启动前点一下那个盘。
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ 4. 待定 ============ -->
+  <!-- ============ 4. 常见问题 ============ -->
   <section>
     <div class="sec-head">
-      <span class="sec-num">04</span><h2>三个地方等你拍板</h2>
-      <span class="note">✅ 2026-10-01 已拍板：都放 D 盘 · 先说一句再干 · 已拆完三层 —— 见《AI记忆分层对照表.md》</span>
+      <span class="sec-num">04</span><h2>动手前常问的三个问题</h2>
+      <span class="note">这三处的取舍，决定了整套东西好不好用</span>
     </div>
 
     <div class="qs">
       <div class="q">
         <div class="qn">Q1</div>
-        <h4>系统记忆放哪？</h4>
-        <p>放 D 盘 = 两边都能读到（我在 Ubuntu 也能替 Windows 任务做判断）；各留本机 = 对方完全看不见。</p>
-        <div class="opt rec"><b>都放 D 盘</b>（推荐）</div>
-        <div class="opt">各留本机（C: / ext4）</div>
+        <h4>系统层的记忆放哪？</h4>
+        <p>放共享盘，两边都能读到，在 Ubuntu 上也能替 Windows 的任务做判断；各留本机，对方完全看不见，等于白记。</p>
+        <div class="opt rec"><b>都放共享盘</b>（推荐）</div>
+        <div class="opt">各留本机（C: / ext4 各一套）</div>
       </div>
       <div class="q">
         <div class="qn">Q2</div>
         <h4>判完要不要先说一声？</h4>
-        <p>自动判断省事，但判错你不一定看得出来。</p>
+        <p>静默判断省事，但判错的时候用户不一定看得出来，只能等答案跑偏了再回头查。</p>
         <div class="opt rec"><b>先说一句</b>「这是 Windows 任务，我读了通用＋Windows」再干</div>
         <div class="opt">静默判断，直接干</div>
       </div>
       <div class="q">
         <div class="qn">Q3</div>
         <h4>现有的记忆怎么搬？</h4>
-        <p>Windows 侧现有 46 条、Ubuntu 侧 3 条，按"会不会随系统变"拆进三层。</p>
-        <div class="opt rec"><b>我来拆</b>，拆完给你一张对照表</div>
+        <p>机器上多半已经攒了一堆记忆条目，按「会不会随系统变」拆进三层即可，不必推倒重来。</p>
+        <div class="opt rec"><b>一次拆完</b>，拆完留一张「旧条目 → 新层」的对照表</div>
         <div class="opt">先只搭空架子，以后慢慢搬</div>
       </div>
     </div>
   </section>
 
   <footer>
-    效果图文件：<code>D:\Windows与Ubuntu互通\AI记忆架构-效果图.html</code> —— 双击用浏览器打开（两边系统都能看）。
-    改完把文件丢回来，我照着改架构。
+    本文是这套框架的可视化概览。完整说明见仓库 <code>docs/</code> 六篇（动机 → 三层 → 路由 → 索引骨架 → 写记忆的规矩 → 接线与坑），
+    可直接复制的空骨架见 <code>template/</code>，接线命令与踩坑见 <code>docs/06-接线与坑.md</code>。
   </footer>
 </div>
 </body>
