@@ -112,7 +112,7 @@ https://github.com/icandoall-things/ai-memory-framework
 |---|---|
 | `docs/` | 六篇说明，从动机一路讲到接线 |
 | `template/` | 可以直接复制的空骨架，不含任何真实条目 |
-| `assets/三级架构效果图.html` | 三层架构的可视化图，浏览器直接打开，自带深色模式。也可[在线看](https://icandoall-things.github.io/ai-memory-framework/assets/三级架构效果图.html) |
+| `assets/三级架构效果图.html` | 一页看完整套架构：路由流程、三层各自装什么、**判定演练**（同一条事实该落哪层，五行例子）、接线怎么接、动手前常问的三个问题。浏览器直接打开，自带深色模式。也可[在线看](https://icandoall-things.github.io/ai-memory-framework/assets/三级架构效果图.html) |
 
 ## 这套东西的边界
 
