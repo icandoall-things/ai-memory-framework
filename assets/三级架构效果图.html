@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三级 AI 记忆架构 · 效果图</title>
+<style>
+  .viz-root{
+    color-scheme: light;
+    --bg:#f2f1ee; --surface-1:#fcfcfb; --surface-2:#f7f6f3;
+    --line:#e4e2dc; --line-strong:#c8c6bf;
+    --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#6f6d68;
+    --c1:#2a78d6; --c2:#eb6834; --c3:#1baf7a;
+    --c1-soft:#e9f1fd; --c2-soft:#fdeee8; --c3-soft:#e5f6f0;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:where(:not([data-theme="light"])) .viz-root{
+      color-scheme: dark;
+      --bg:#131312; --surface-1:#1a1a19; --surface-2:#212120;
+      --line:#33322f; --line-strong:#4a4945;
+      --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#9d9b92;
+      --c1:#3987e5; --c2:#d95926; --c3:#199e70;
+      --c1-soft:#16253a; --c2-soft:#33201a; --c3-soft:#132a22;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] .viz-root{
+    color-scheme: dark;
+    --bg:#131312; --surface-1:#1a1a19; --surface-2:#212120;
+    --line:#33322f; --line-strong:#4a4945;
+    --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#9d9b92;
+    --c1:#3987e5; --c2:#d95926; --c3:#199e70;
+    --c1-soft:#16253a; --c2-soft:#33201a; --c3-soft:#132a22;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:40px 28px 72px;background:var(--bg);color:var(--text-primary);
+    font:15px/1.75 system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  }
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;line-height:1.3;margin:0 0 6px;letter-spacing:.01em}
+  h2{font-size:17px;margin:0 0 4px;letter-spacing:.01em}
+  .sub{color:var(--text-secondary);margin:0 0 36px;font-size:14px}
+  section{margin:0 0 44px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 16px;
+    padding-bottom:9px;border-bottom:1px solid var(--line)}
+  .sec-num{font-variant-numeric:tabular-nums;font-weight:600;color:var(--text-muted);font-size:13px}
+  .sec-head h2{font-size:18px;margin:0}
+  .sec-head span.note{color:var(--text-secondary);font-size:13px;margin-left:auto;text-align:right}
+
+  /* ---------- flow ---------- */
+  .node{background:var(--surface-1);border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px;box-shadow:var(--shadow)}
+  .node.start{display:inline-block;font-weight:600}
+  .center{text-align:center}
+  .arrow{width:2px;height:26px;background:var(--line-strong);margin:0 auto;position:relative}
+  .arrow::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
+    border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line-strong)}
+  .router{border-left:4px solid var(--text-muted);text-align:center}
+  .router .q{font-weight:600;font-size:16px}
+  .router .hint{color:var(--text-secondary);font-size:13px}
+  .branches{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:0}
+  .branch{background:var(--surface-1);border:1px solid var(--line);border-radius:10px;
+    padding:14px 15px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px}
+  .branch .tag{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px}
+  .dot{width:10px;height:10px;border-radius:50%;flex:none}
+  .branch .eg{color:var(--text-secondary);font-size:12.5px;line-height:1.6;flex:1}
+  .reads{font-size:12.5px;font-weight:600;padding:6px 9px;border-radius:6px;
+    background:var(--surface-2);border:1px dashed var(--line-strong);text-align:center}
+  .b-win{border-top:3px solid var(--c2)} .b-win .dot{background:var(--c2)}
+  .b-ubu{border-top:3px solid var(--c3)} .b-ubu .dot{background:var(--c3)}
+  .b-all{border-top:3px solid var(--line-strong)} .b-all .dot{background:var(--text-muted)}
+  .b-common{border-top:3px solid var(--c1)} .b-common .dot{background:var(--c1)}
+  .b-win .reads{color:var(--c2);border-color:var(--c2)}
+  .b-ubu .reads{color:var(--c3);border-color:var(--c3)}
+  .b-common .reads{color:var(--c1);border-color:var(--c1)}
+
+  /* ---------- layers ---------- */
+  .layers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .layer{background:var(--surface-1);border:1px solid var(--line);border-radius:12px;
+    padding:0;overflow:hidden;box-shadow:var(--shadow)}
+  .layer .top{padding:15px 18px 13px;border-bottom:1px solid var(--line)}
+  .layer .toppath{font-size:12px;color:var(--text-secondary);font-family:ui-monospace,Menlo,Consolas,monospace}
+  .layer h3{margin:0 0 5px;font-size:16.5px;display:flex;align-items:center;gap:8px}
+  .layer .rule{padding:13px 18px;font-size:13px;color:var(--text-secondary);flex:1}
+  .layer ul{margin:9px 0 0;padding-left:18px}
+  .layer li{margin:5px 0;font-size:13.5px;color:var(--text-primary)}
+  .layer li small{color:var(--text-muted);font-size:12px}
+  .layer .body{padding:13px 18px 18px}
+  .l1{border-top:4px solid var(--c1)} .l1 h3{color:var(--c1)} .l1 .top{background:var(--c1-soft)}
+  .l2{border-top:4px solid var(--c2)} .l2 h3{color:var(--c2)} .l2 .top{background:var(--c2-soft)}
+  .l3{border-top:4px solid var(--c3)} .l3 h3{color:var(--c3)} .l3 .top{background:var(--c3-soft)}
+  .qbox{font-size:12.5px;font-weight:600;color:var(--text-secondary);
+    background:var(--surface-2);border-radius:6px;padding:6px 9px;display:inline-block;margin-top:7px}
+
+  /* ---------- wiring ---------- */
+  .wire{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:start}
+  pre{margin:0;background:var(--surface-1);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;overflow:auto;font:12.5px/1.85 ui-monospace,Menlo,Consolas,"Noto Sans Mono CJK SC",monospace;
+    color:var(--text-primary);box-shadow:var(--shadow)}
+  .imports{display:flex;flex-direction:column;gap:14px}
+  .imp{background:var(--surface-1);border:1px solid var(--line);border-radius:10px;
+    padding:13px 16px;box-shadow:var(--shadow)}
+  .imp .who{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .imp code{display:block;font:12px/1.75 ui-monospace,Menlo,Consolas,monospace;
+    color:var(--text-secondary);word-break:break-all}
+  .imp code b{color:var(--text-primary);font-weight:600}
+  .imp .at{color:var(--c1);font-weight:700}
+  .warn{margin-top:14px;font-size:12.5px;color:var(--text-secondary);
+    background:var(--surface-2);border-left:3px solid var(--line-strong);border-radius:0 8px 8px 0;padding:10px 14px}
+
+  /* ---------- questions ---------- */
+  .qs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .q{background:var(--surface-1);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;box-shadow:var(--shadow)}
+  .q .qn{font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.08em}
+  .q h4{margin:5px 0 9px;font-size:15px}
+  .q p{margin:0 0 8px;font-size:13px;color:var(--text-secondary)}
+  .q .opt{font-size:13px;padding:7px 0 7px 22px;position:relative;border-top:1px solid var(--line)}
+  .q .opt:first-of-type{border-top:0}
+  .q .opt::before{content:"○";position:absolute;left:2px;color:var(--text-muted)}
+  .q .opt.rec::before{content:"●";color:var(--c1)}
+  .q .opt b{font-weight:600}
+  footer{color:var(--text-muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:16px}
+  @media (max-width:900px){
+    .layers,.branches,.wire,.qs{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body class="viz-root">
+<div class="wrap">
+
+  <h1>三级 AI 记忆架构 · 效果图</h1>
+  <p class="sub">Windows ⇄ Ubuntu 双系统 &nbsp;·&nbsp; 草案 v1（2026-10-01）&nbsp;·&nbsp; 供你圈改：每块都能拆、能改颜色、能改判定标准</p>
+
+  <!-- ============ 1. 路由 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span><h2>任务进来先路由：这条活儿归哪个系统？</h2>
+      <span class="note">每接一个任务都走一遍这四步</span>
+    </div>
+
+    <div class="center"><span class="node start">你下达任务</span></div>
+    <div class="arrow"></div>
+    <div class="node router">
+      <div class="q">第 1 步 · 判断「任务载体」</div>
+      <div class="hint">看它要动的文件、要跑的命令、要用的软件在哪个系统上</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="branches">
+      <div class="branch b-win">
+        <span class="tag"><i class="dot"></i>Windows 专属</span>
+        <span class="eg">众盈杯 / 明纬杯 / 课程作业<br>Windows 系统·外设排查·PowerShell</span>
+        <span class="reads">读 通用 ＋ Windows 记忆</span>
+      </div>
+      <div class="branch b-ubu">
+        <span class="tag"><i class="dot"></i>Ubuntu 专属</span>
+        <span class="eg">ROS2 / ESP 烧录<br>kbd_poll 驱动 / 装机 / apt 换源</span>
+        <span class="reads">读 通用 ＋ Ubuntu 记忆</span>
+      </div>
+      <div class="branch b-all">
+        <span class="tag"><i class="dot"></i>跨系统</span>
+        <span class="eg">D 盘工具链 / 技能库<br>双系统时间与 RTC / 这套记忆本身</span>
+        <span class="reads">三层全读</span>
+      </div>
+      <div class="branch b-common">
+        <span class="tag"><i class="dot"></i>纯通用</span>
+        <span class="eg">沟通风格 / 写作去 AI 味<br>报告规矩 / 记忆怎么写</span>
+        <span class="reads">只读 通用</span>
+      </div>
+    </div>
+
+    <div class="arrow"></div>
+    <div class="node router">
+      <div class="q">第 2 步 · 判断该调哪个 skill</div>
+      <div class="hint">扫技能列表 → 说出调哪个、为什么 → 再动手</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node center">
+      <b>第 3 步 · 执行</b>
+      <div class="hint" style="color:var(--text-secondary);font-size:13px">干完活有新规矩 → 写回对应那层（长期成立 → 通用；只在某系统成立 → 该系统层）</div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 三层 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span><h2>三层记忆：各自装什么</h2>
+      <span class="note">判定标准只有一句话 —— 换个系统还成立吗？</span>
+    </div>
+
+    <div class="layers">
+      <div class="layer l1">
+        <div class="top">
+          <h3><i class="dot" style="background:var(--c1)"></i>通用 MEMORY</h3>
+          <div class="toppath">D:\AI-MEMORY\通用MEMORY\</div>
+        </div>
+        <div class="body">
+          <span class="qbox">判定：换到另一个系统，这条还成立吗？</span>
+          <div class="rule">
+            <ul>
+              <li>怎么跟你沟通 <small>大白话＋类比</small></li>
+              <li>记忆的写法 <small>只写长期约束，不写"此刻状态"</small></li>
+              <li>技能库位置 <small>D:\claude-skills\</small></li>
+              <li>工具装 D:\&lt;名字&gt;，别进项目文件夹</li>
+              <li>API key 不写进任何文档</li>
+              <li>报告要保留原始图表</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer l2">
+        <div class="top">
+          <h3><i class="dot" style="background:var(--c2)"></i>Windows MEMORY</h3>
+          <div class="toppath">D:\AI-MEMORY\WindowsMEMORY\</div>
+        </div>
+        <div class="body">
+          <span class="qbox">判定：只在 Windows 上做的事</span>
+          <div class="rule">
+            <ul>
+              <li>众盈杯（目标检测比赛）</li>
+              <li>明纬杯（开关电源 / PCB）</li>
+              <li>课程作业 · 实验报告</li>
+              <li>Windows 系统·驱动·外设排查</li>
+              <li>PowerShell / 盘符路径规矩</li>
+              <li>众盈杯等项目的 <b>当前进度</b>（会过期）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer l3">
+        <div class="top">
+          <h3><i class="dot" style="background:var(--c3)"></i>Ubuntu MEMORY</h3>
+          <div class="toppath">D:\AI-MEMORY\UbuntuMEMORY\</div>
+        </div>
+        <div class="body">
+          <span class="qbox">判定：只在 Ubuntu 上做的事</span>
+          <div class="rule">
+            <ul>
+              <li>ROS2 Humble / 工作区</li>
+              <li>内置键盘 kbd_poll 轮询驱动</li>
+              <li>无线键盘断电重连方案</li>
+              <li>Ubuntu 装机 / 分区 / apt 源</li>
+              <li>npm·node 环境（v22）</li>
+              <li>Ubuntu 侧当前状态（会过期）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. 接线 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span><h2>文件放哪 · 两边怎么接上</h2>
+      <span class="note">全放 D 盘：NTFS 两个系统都读写得到</span>
+    </div>
+
+    <div class="wire">
+      <pre>D:\AI-MEMORY\
+├── 通用MEMORY\
+│   ├── MEMORY.md          ← 索引 + 路由表（第一入口）
+│   ├── 沟通风格.md
+│   ├── 记忆规矩.md
+│   └── 技能库位置.md
+├── WindowsMEMORY\
+│   ├── MEMORY.md          ← 索引
+│   ├── 众盈杯\ …
+│   ├── 明纬杯\ …
+│   ├── 课程作业\ …
+│   └── 本机Windows\ …
+└── UbuntuMEMORY\
+    ├── MEMORY.md          ← 索引
+    ├── ROS2\ …
+    ├── 本机Linux\ …
+    └── 远程与网络\ …</pre>
+
+      <div class="imports">
+        <div class="imp">
+          <div class="who"><i class="dot" style="background:var(--c2)"></i>Windows 侧</div>
+          <code>C:\Users\35098\.claude\CLAUDE.md</code>
+          <code>&nbsp;&nbsp;<span class="at">@</span><b>D:\AI-MEMORY\通用MEMORY\MEMORY.md</b></code>
+          <code>&nbsp;&nbsp;<span class="at">@</span><b>D:\AI-MEMORY\WindowsMEMORY\MEMORY.md</b></code>
+        </div>
+        <div class="imp">
+          <div class="who"><i class="dot" style="background:var(--c3)"></i>Ubuntu 侧</div>
+          <code>/home/yyy/.claude/CLAUDE.md</code>
+          <code>&nbsp;&nbsp;<span class="at">@</span><b>/media/yyy/Windows盘/AI-MEMORY/通用MEMORY/MEMORY.md</b></code>
+          <code>&nbsp;&nbsp;<span class="at">@</span><b>/media/yyy/Windows盘/AI-MEMORY/UbuntuMEMORY/MEMORY.md</b></code>
+        </div>
+        <div class="warn">
+          <b>要点</b>：`@` 那一行就是"只读自己那两份"。D 盘没挂载时 Ubuntu 那两行会<b>静默失效</b>（不报错）——
+          所以启动前点一下 D 盘，或者放进开机自动挂载。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. 待定 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span><h2>三个地方等你拍板</h2>
+      <span class="note">✅ 2026-10-01 已拍板：都放 D 盘 · 先说一句再干 · 已拆完三层 —— 见《AI记忆分层对照表.md》</span>
+    </div>
+
+    <div class="qs">
+      <div class="q">
+        <div class="qn">Q1</div>
+        <h4>系统记忆放哪？</h4>
+        <p>放 D 盘 = 两边都能读到（我在 Ubuntu 也能替 Windows 任务做判断）；各留本机 = 对方完全看不见。</p>
+        <div class="opt rec"><b>都放 D 盘</b>（推荐）</div>
+        <div class="opt">各留本机（C: / ext4）</div>
+      </div>
+      <div class="q">
+        <div class="qn">Q2</div>
+        <h4>判完要不要先说一声？</h4>
+        <p>自动判断省事，但判错你不一定看得出来。</p>
+        <div class="opt rec"><b>先说一句</b>「这是 Windows 任务，我读了通用＋Windows」再干</div>
+        <div class="opt">静默判断，直接干</div>
+      </div>
+      <div class="q">
+        <div class="qn">Q3</div>
+        <h4>现有的记忆怎么搬？</h4>
+        <p>Windows 侧现有 46 条、Ubuntu 侧 3 条，按"会不会随系统变"拆进三层。</p>
+        <div class="opt rec"><b>我来拆</b>，拆完给你一张对照表</div>
+        <div class="opt">先只搭空架子，以后慢慢搬</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    效果图文件：<code>D:\Windows与Ubuntu互通\AI记忆架构-效果图.html</code> —— 双击用浏览器打开（两边系统都能看）。
+    改完把文件丢回来，我照着改架构。
+  </footer>
+</div>
+</body>
+</html>
